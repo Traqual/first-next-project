@@ -2,6 +2,7 @@ import {useRouter} from "next/router";
 import Head from "next/head";
 import Layout from "../../components/layout";
 import { Link } from "@mui/material";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export default function Article({article}) {
         const router = useRouter();
@@ -14,10 +15,9 @@ export default function Article({article}) {
             </Head>
 
             <Link href="/articles">
-               Go back to Articles
+                <ArrowBackIcon className={'back-arrow'}/>
             </Link>
 
-            <p>This is article {id}</p>
             <h3>{article.title}</h3>
             <p>{article.preview_content}</p>
 
@@ -27,6 +27,18 @@ export default function Article({article}) {
         )
 }
 
+export async function getServerSideProps({params}) {
+    const req = await fetch(`http://localhost:3000/api/articles/${params.id}`, {
+        'method': 'GET'
+    });
+    const data = await req.json();
+
+    return {
+        props: { article: data }
+    }
+}
+
+/*
 export async function getStaticProps({params}) {
     const req = await fetch(`http://localhost:3000/jsons/${params.id}.json`);
     const data = await req.json();
@@ -48,4 +60,4 @@ export async function getStaticPaths() {
         paths,
         fallback: false
     } 
-}
+}*/

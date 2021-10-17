@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "title": "Titre article test",
+        "preview_content": "Ceci est la preview du contenu de mon premier article",
+        "content": "<p>Ceci est le contenu de mon premier article</p>"
+    },
+    {
+        "title": "test tinyMCE !",
+        "preview_content": "test tinyMCE - article sur un truc !",
+        "content": "<h1 style=\"text-align: center;\">Article sur un truc</h1>\n<pre style=\"text-align: center;\">Les trucs c'est chouette, blablablabla<br /><strong>bidule</strong><br /><em>chose</em><br /><span style=\"background-color: #e03e2d;\">machin !</span></pre>",
+        "id": 4
+    },
+    {
+        "title": "Giphy",
+        "preview_content": "cat wink",
+        "content": "<p><img src=\"https://media.giphy.com/media/GvaFelN8tSroAESiS9/giphy.gif\" /></p>",
+        "id": 5
+    }
+]

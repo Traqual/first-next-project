@@ -1,50 +1,44 @@
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useRef } from 'react';
 import { useForm } from "react-hook-form";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Layout from '../../components/layout'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Link } from "@mui/material";
+import Router from 'next/router'
+import { Editor } from '@tinymce/tinymce-react';
+
 
 let schema = yup.object().shape({
     title: yup.string().required(),
-    preview_content: yup.string().required(),
-    content: yup.string().required(),
+    preview_content: yup.string().required()
  });
 
 export default function App() {
+
+  const editorRef = useRef(null);
+
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
-    createTextFile(data);
-  }
-
-  const  updateArticleIdList = async () => {
-    const req = await fetch(`http://localhost:3000/jsons/articles.json`);
-    const data = await req.json();
-    
-    return 3; // TODO change temp id 
-  }
-
-  const createTextFile = (data) => {
-    console.log('createTextFile function');
-    const element = document.createElement("a");
-    const nbFile = updateArticleIdList();
-
-    const file = new Blob([
-      "{" +
-      "id: " + nbFile +
-      "title: " +data.title +
-      "preview_content: " + data.preview_content +
-      "content: " + data.content
-  ], {type: 'text/plain'});
-    // TODO dowload this file
+  const onSubmit = async (data) => {
+    data.content = editorRef.current.getContent();
+    const req = await fetch(`http://localhost:3000/api/articles`, {
+        'method': 'POST',
+        'body': JSON.stringify(data)
+    });
+    Router.push('/articles');
   }
 
   return (
     <Layout>
+      <Link href="/articles">
+        <ArrowBackIcon className={'back-arrow'}/>
+      </Link>
+
+      <h3>Créer un nouvel article</h3>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box>
           <label>Titre</label>
@@ -58,7 +52,25 @@ export default function App() {
         </Box>
         <Box>
           <label>Contenu</label>
-          <input type="text" id="content_input" className="form-control" {...register("content")} />
+          <Editor
+            id="content_input" className="form-control" {...register("content")}
+            onInit={(evt, editor) => editorRef.current = editor}
+            initialValue="<p>Insert your content here</p>"
+            init={{
+              height: 500,
+              menubar: false,
+              plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste code help wordcount'
+              ],
+              toolbar: 'undo redo | formatselect | ' +
+              'bold italic backcolor | alignleft aligncenter ' +
+              'alignright alignjustify | bullist numlist outdent indent | ' +
+              'removeformat | help',
+              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+            }}
+          />
           {errors.content && <span>{errors.content.message}</span>}
         </Box>
         

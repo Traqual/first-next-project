@@ -12,9 +12,7 @@ import Image from 'next/image';
 import utilStyles from '../styles/utils.module.css';
 import ListIcon from '@mui/icons-material/List';
 
-const name = 'Jean Janin'
-
-export default function Navbar({ actualPage , login}) {
+export default function Navbar({ actualPage }) {
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const [open, setOpen] = React.useState(Boolean(anchorEl));
 
@@ -63,31 +61,18 @@ export default function Navbar({ actualPage , login}) {
 						</a>
 					</Link>
 				</MenuItem>
-				<MenuItem>Logout</MenuItem>
+				<MenuItem>
+					<Link href="/categories">
+						<a>
+						Categories
+						</a>
+					</Link>
+				</MenuItem>
 			</Menu>
 		  </IconButton>
 		  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
 			  <h3>{actualPage}</h3>
 		  </Typography>
-		  {login ? (
-			<div style={{ float: "right" }}>
-			  <Link href="/">
-				<a style={{ marginLeft: "calc(50% - 18px)" }}>
-				  <Image
-					priority
-					src="/images/player.png"
-					className={utilStyles.borderCircle}
-					height={35}
-					width={35}
-					alt={name}
-				  />
-				</a>
-			  </Link>
-			  <p style={{ margin: "0" }}>{name}</p>
-			</div>
-		  ) : (
-			<Button color="inherit">Login</Button>
-		  )}
 		</Toolbar>
 	  </AppBar>
 	</Box>
